@@ -167,12 +167,6 @@
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
-		<!-- 分享 -->
-		<share 
-			ref="share" 
-			:contentHeight="580"
-			:shareList="shareList"
-		></share>
 	</view>
 </template>
 
@@ -202,7 +196,6 @@
 				specClass: 'none',
 				specSelected:[],
 				favorite: false,
-				shareList: [],
 				imgList: [],
 				desc: '',
 				specList: [],
@@ -295,8 +288,6 @@
 						this.resetProductInfo();
 				}).catch(err=> { console.log(err) })
 			}
-			
-			this.shareList = await this.$api.json('shareList');
 		},
 		methods:{
 			//规格弹窗开关

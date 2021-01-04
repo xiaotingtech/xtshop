@@ -144,7 +144,6 @@
 				recommendTwoGoodsList: []
 			};
 		},
-
 		onLoad() {
 			this.loadData();
 		},

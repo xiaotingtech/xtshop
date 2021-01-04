@@ -110,7 +110,7 @@
 		},
 		onShow(){
 			if(!this.hasLogin){
-				url = '/pages/public/login';
+				let url = '/pages/public/login';
 				uni.navigateTo({  
 					url
 				});
@@ -119,26 +119,6 @@
 		onLoad(){
 			this.loadData();
 		},
-		// #ifndef MP
-		onNavigationBarButtonTap(e) {
-			const index = e.index;
-			if (index === 0) {
-				this.navTo('/pages/set/set');
-			}else if(index === 1){
-				// #ifdef APP-PLUS
-				const pages = getCurrentPages();
-				const page = pages[pages.length - 1];
-				const currentWebview = page.$getAppWebview();
-				currentWebview.hideTitleNViewButtonRedDot({
-					index
-				});
-				// #endif
-				uni.navigateTo({
-					url: '/pages/notice/notice'
-				})
-			}
-		},
-		// #endif
         computed: {
 			...mapState(['hasLogin','userInfo'])
 		},

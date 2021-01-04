@@ -11,7 +11,7 @@
 		},
 		onLaunch: function() {
 			let userInfo = uni.getStorageSync('userInfo') || '';
-			if(userInfo.id){
+			if(userInfo){
 				//更新登陆状态
 				uni.getStorage({
 					key: 'userInfo',
@@ -41,6 +41,9 @@
 		font-style: normal;
 		src: url('https://at.alicdn.com/t/font_1078604_w4kpxh0rafi.ttf') format('truetype');
 	}
+	uni-page-body,html,body{  
+        height: 100%;  
+    }  
 
 	.yticon {
 		font-family: "yticon" !important;

@@ -37,7 +37,8 @@ export function loginWechat(){
 				method: 'post',
 				data:{code:loginRes.code}
 			  }).then(codeRes=> {
-				uni.setStorageSync('token',codeRes.token);  
+				uni.setStorageSync('token',codeRes.token); 
+				uni.setStorageSync('userInfo',codeRes);  
 				Vue.prototype.$store.state.hasLogin=true;  
 				Vue.prototype.$store.state.userInfo=codeRes;
 				resolve({isLogin:true,result:codeRes});

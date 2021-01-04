@@ -9,12 +9,17 @@
 			<view class="welcome">
 				欢迎您！
 			</view>
-			<button openType="getUserInfo" class="input-content" @click="toLogin">
+			<button openType="getUserInfo" class="input-content">
 				<view v-if="!hasLogin" class="login_view">
 					<image src="/static/login.png" mode="aspectFit" class="login_img"></image>
 				</view>
-				<view v-if="!hasLogin" class="login_view">
+				<view v-if="!hasLogin" class="login_view" @click="toLogin">
 					<text class="login_text">点我授权</text>
+				</view>
+			</button>
+			<button v-if="!hasLogin" class="input-content" @click="navBack">
+				<view class="login_view">
+					<text class="login_cancel text-error">取消登录</text>
 				</view>
 			</button>
 		</view>
@@ -39,65 +44,80 @@
 		methods: {
 			...mapMutations(['login']),
 			navBack(){
-				uni.navigateBack();
+				uni.switchTab({
+					url: '/pages/index/index'
+				})
 			},
 			async toLogin(){
 				this.logining = true;
 				let that=this;
-				uni.login({
-				    provider: "weixin",
-				    success: loginRes => {
-				      console.log('debug log --> ', loginRes)
-					  loginWechat({code:loginRes.code}).then(codeRes=> {
-						if(codeRes.result.is_bind==1){
-							uni.navigateBack();
-							return false;
-						} 
-						uni.getUserInfo({
-						        provider: "weixin",
-						        success: (infoRes) => {
-						            updateInfo({
-						              iv: infoRes.iv,
-						              encrypted_data: infoRes.encryptedData
-						            }).then(res => {
-										that.login(res);
-										uni.navigateBack();
-						            }).catch(err => {
-						              console.log('debug log --> ', err)
-						              uni.showToast({
-						                title: err.errMsg,
-						                icon: "none",
-						                duration: 2000
-						              })
-						            })
-						        },
-						        fail: () => {
-						            uni.showToast({
-						              title: '用户信息获取失败',
-						              icon: 'none',
-						              duration: 2000
-						            })
-						        }
-						  })
-					  }).catch(err=> { 
-						  uni.showToast({
-						    title: '登陆失败',
-						    icon: "none",
-						    duration: 2000
-						  })
-						  this.logining = false;
-						})
-				    },
-				    fail: (loginErr) => {
-				      console.log('debug log --> ', loginErr)
-				      uni.showToast({
-				        title: loginErr.errMsg,
-				        icon: "none",
-				        duration: 2000
-				      })
-					  this.logining = false;
+				uni.showModal({
+				    title: '是否要登录？',
+				    content: '登录将获取您的微信用户信息',
+				    success: function (res) {
+				        if (res.confirm) {
+								uni.login({
+								    provider: "weixin",
+								    success: loginRes => {
+								      console.log('debug log --> ', loginRes)
+									  loginWechat({code:loginRes.code}).then(codeRes=> {
+										if(codeRes.result.is_bind==1){
+											uni.navigateBack();
+											return false;
+										} 
+										uni.getUserInfo({
+										        provider: "weixin",
+										        success: (infoRes) => {
+										            updateInfo({
+										              iv: infoRes.iv,
+										              encrypted_data: infoRes.encryptedData
+										            }).then(res => {
+														that.login(res);
+														uni.navigateBack();
+										            }).catch(err => {
+										              console.log('debug log --> ', err)
+										              uni.showToast({
+										                title: err.errMsg,
+										                icon: "none",
+										                duration: 2000
+										              })
+										            })
+										        },
+										        fail: () => {
+										            uni.showToast({
+										              title: '用户信息获取失败',
+										              icon: 'none',
+										              duration: 2000
+										            })
+										        }
+										  })
+									  }).catch(err=> { 
+										  uni.showToast({
+										    title: '登陆失败',
+										    icon: "none",
+										    duration: 2000
+										  })
+										  that.logining = false;
+										})
+								    },
+								    fail: (loginErr) => {
+								      console.log('debug log --> ', loginErr)
+								      uni.showToast({
+								        title: loginErr.errMsg,
+								        icon: "none",
+								        duration: 2000
+								      })
+									  that.logining = false;
+								    }
+							})
+				        } else{
+							that.logining = false;
+							uni.switchTab({
+								url: '/pages/index/index'
+							})
+				        }
 				    }
-				  })
+				});
 			}
 		},
 
@@ -217,6 +237,10 @@
 				color: $font-color-spec;
 				flex-direction: column;
 			}
+		}
+		.login_cancel{
+			margin-top:50rpx;
+			color: red;
 		}
 	}
 </style>
