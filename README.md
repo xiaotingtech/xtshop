@@ -13,7 +13,7 @@
 
 ## 前言
 
-该项目为B2C商城的小程序前端部分，基于uniapp开发，后端项目`xtshop`地址：[传送门](https://gitee.com/tingchun/xtshop)。
+该项目为B2C商城的小程序前端部分，基于uniapp开发，后端项目`xtshop-back`地址：[传送门](https://github.com/xiaotingtech/xtshop-back.git)。
 
 ## 许可证
 
